@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Interview</string>
+    <string name="username_input_label">Enter your username:</string>
+    <string name="username_hint">username</string>
+    <string name="password_input_label">Enter your password:</string>
+    <string name="password_hint">password</string>
+    <string name="login_text">Log In</string>
+    <string name="save_username_label">save username</string>
 </resources>
