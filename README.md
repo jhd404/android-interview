@@ -1,4 +1,8 @@
 # android-interview
 
-Follow the instructions in app/src/main/java/com/stablekernel/interview/ui/login/LoginActivity.java.  There are further instructions in any file that needs to be modified.  You will discover these as you work through the exercise.  You don't need to concern yourself with them at the beginning.
+### Resources used:
 
+* Big Nerd Ranch Android Programming Guide, 3rd Edition
+    * Referenced Geoquiz and CriminalIntent projects previously written with this guide
+* Google search
+    * "android password field" -> [Mkyong.com](https://www.mkyong.com/android/android-password-field-example/)
