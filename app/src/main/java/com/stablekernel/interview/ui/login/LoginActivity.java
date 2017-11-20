@@ -15,6 +15,9 @@ import com.stablekernel.interview.api.model.TokenResponse;
 import com.stablekernel.interview.InterviewApplication;
 import com.stablekernel.interview.ui.profile.ProfileActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,6 +107,13 @@ public final class LoginActivity extends AppCompatActivity {
                              @Override
                              public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                                  Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+                                 if (response.code() == 200) {
+                                     List<String> skills = new ArrayList<>();
+                                     skills.add("skill 1");
+                                     skills.add("skill 2");
+                                     Profile profile = new Profile("Justin", .55, skills);
+                                     ProfileActivity.start(LoginActivity.this, profile);
+                                 }
                              }
 
                              @Override

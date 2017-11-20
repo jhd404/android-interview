@@ -8,3 +8,6 @@
     * "android password field" -> [Mkyong.com](https://www.mkyong.com/android/android-password-field-example/)
     * "regex" -> [regexr](https://regexr.com/)
     * "java string.matches" -> [stackoverflow](https://stackoverflow.com/questions/8923398/regex-doesnt-work-in-string-matches)
+    * "parcelable"
+        * [Parcelable vs. Java Serialization in Android App Development](https://www.3pillarglobal.com/insights/parcelable-vs-java-serialization-in-android-app-development)
+        * [Using Parcelable](https://guides.codepath.com/android/using-parcelable)
