@@ -70,11 +70,10 @@ public final class LoginActivity extends AppCompatActivity {
 
     private void onLogin(String username, String password) {
 
-        // Commented out to make build successful and preview layout
-//        if (!isInputValid(username, password)) {
-//            Log.d(TAG, "Invalid input");
-//            return;
-//        }
+        if (!isInputValid(username, password)) {
+            Log.d(TAG, "Invalid input");
+            return;
+        }
 
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
 
@@ -91,6 +90,10 @@ public final class LoginActivity extends AppCompatActivity {
                              }
                          }
                 );
+    }
+
+    boolean isInputValid(String username, String password) {
+        return username.matches("[\\S]+") && password.matches("[\\S]+");
     }
 }
 
