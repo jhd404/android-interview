@@ -3,16 +3,22 @@ package com.stablekernel.interview.ui.login;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.stablekernel.interview.R;
 import com.stablekernel.interview.api.InterviewWebService;
 import com.stablekernel.interview.api.model.LoginCredentials;
+import com.stablekernel.interview.api.model.Profile;
 import com.stablekernel.interview.api.model.TokenResponse;
 import com.stablekernel.interview.InterviewApplication;
+import com.stablekernel.interview.ui.profile.ProfileActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HTTP;
 
 /*
     Use the following instructions to complete the implementation of LoginActivity.
@@ -60,15 +66,31 @@ public final class LoginActivity extends AppCompatActivity {
 
     private InterviewWebService interviewWebService;
 
+    private EditText mUsernameEditText;
+    private EditText mPasswordEditText;
+    private Button mLoginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         interviewWebService = ((InterviewApplication) getApplication()).getInterviewWebService();
+
+        mUsernameEditText = (EditText) findViewById(R.id.username_field);
+        mPasswordEditText = (EditText) findViewById(R.id.password_field);
+
+        mLoginButton = (Button) findViewById(R.id.login_button);
+        mLoginButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                onLogin(mUsernameEditText.getText().toString(), mPasswordEditText.getText().toString());
+            }
+        });
     }
 
     private void onLogin(String username, String password) {
+        Log.d(TAG, "onLogin() called with username = [" + username + "], password = [" + password + "]");
 
         if (!isInputValid(username, password)) {
             Log.d(TAG, "Invalid input");
