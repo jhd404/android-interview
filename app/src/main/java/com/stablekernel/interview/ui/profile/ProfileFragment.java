@@ -37,20 +37,29 @@ public final class ProfileFragment extends Fragment {
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
 
+    public static final String ARGUMENT_PROFILE = "com.stablekernel.interview.ARGUMENT_PROFILE";
+
     private TextView nameTextView;
     private TextView progressTextView;
     private RecyclerView skillsRecyclerView;
 
     public static ProfileFragment newInstance(Profile profile) {
-        // TODO: implement me
-        return null;
+        ProfileFragment profileFragment = new ProfileFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(ARGUMENT_PROFILE, profile);
+        profileFragment.setArguments(arguments);
+
+        return profileFragment;
     }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // TODO: inflate the layout fragment_profile.xml and return the resulting view
-        return null;
+        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        return v;
     }
 
     @Override
@@ -58,8 +67,13 @@ public final class ProfileFragment extends Fragment {
         Log.d(TAG, "onViewCreated() called with: view = [" + view + "], savedInstanceState = [" + savedInstanceState + "]");
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO: this fragment requires a valid instance of Profile
         Profile profile = null;
+
+        Bundle arguments = getArguments();
+
+        if (arguments != null) {
+            profile = arguments.getParcelable(ARGUMENT_PROFILE);
+        }
 
         nameTextView = (TextView) view.findViewById(R.id.profile_name_textView);
         progressTextView = (TextView) view.findViewById(R.id.profile_progress_textView);
