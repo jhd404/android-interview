@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.stablekernel.interview.R;
 import com.stablekernel.interview.api.model.Profile;
@@ -31,7 +32,6 @@ public final class ProfileActivity extends AppCompatActivity {
 
     public static void start(Context context, Profile profile) {
         Intent profileIntent = new Intent(context, ProfileActivity.class);
-        // TODO: you'll want to uncomment this.  it's commented so that we can compile before we get here
         profileIntent.putExtra(EXTRA_PROFILE, profile);
         context.startActivity(profileIntent);
     }
@@ -41,6 +41,10 @@ public final class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.oops);
+
+        Profile profile = getIntent().getParcelableExtra(EXTRA_PROFILE);
+
+        Log.d(TAG, "ProfileActivity onCreate() called with profile for [" + profile.getName() + "]");
 
         // TODO: use ProfileFragment
     }
