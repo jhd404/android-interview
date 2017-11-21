@@ -1,10 +1,13 @@
 package com.stablekernel.interview.api;
 
 import com.stablekernel.interview.api.model.LoginCredentials;
+import com.stablekernel.interview.api.model.Profile;
 import com.stablekernel.interview.api.model.TokenResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /*
@@ -19,5 +22,8 @@ public interface InterviewWebService {
 
     @POST("auth/token")
     Call<TokenResponse> login(@Body LoginCredentials loginCredentials);
+
+    @GET("/me")
+    Call<Profile> profile(@Header("Authorization") String bearerToken);
 
 }

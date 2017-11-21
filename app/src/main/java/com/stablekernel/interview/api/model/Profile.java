@@ -12,24 +12,31 @@ package com.stablekernel.interview.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public final class Profile implements Parcelable {
+
+    @SerializedName("name")
     private String mName;
+
+    @SerializedName("progress")
     private double mProgress;
+
+    @SerializedName("skills")
     private List<String> mSkills;
 
     public Profile(String name, double progress, List<String> skills) {
-        mName = name;
-        mProgress = progress;
-        mSkills = skills;
+        this.mName = name;
+        this.mProgress = progress;
+        this.mSkills = skills;
     }
 
     private Profile(Parcel in) {
         mName = in.readString();
         mProgress = in.readDouble();
         mSkills = in.createStringArrayList();
-//        in.readStringList(mSkills);
     }
 
     @Override
