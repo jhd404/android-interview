@@ -6,4 +6,5 @@
     <string name="password_hint">password</string>
     <string name="login_text">Log In</string>
     <string name="save_username_label">save username</string>
+    <string name="actionbar_profile">YER PROFILE:</string>
 </resources>

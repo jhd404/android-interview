@@ -57,7 +57,6 @@ public final class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // TODO: inflate the layout fragment_profile.xml and return the resulting view
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
         return v;
     }
@@ -84,7 +83,5 @@ public final class ProfileFragment extends Fragment {
         progressTextView.setText(Double.toString(profile.getProgress()));
 
         skillsRecyclerView.setAdapter(new SkillRecyclerViewAdapter(profile.getSkills()));
-
-        // TODO: set the title to something fun
     }
 }
