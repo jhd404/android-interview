@@ -6,6 +6,7 @@
     <string name="password_hint">password</string>
     <string name="login_text">Log In</string>
     <string name="save_username_label">save username</string>
+    <string name="actionbar_login">Who ye be?</string>
     <string name="actionbar_profile">YER PROFILE:</string>
     <string name="invalid_credentials_toast">Invalid username/password combination. Please try again.</string>
 </resources>

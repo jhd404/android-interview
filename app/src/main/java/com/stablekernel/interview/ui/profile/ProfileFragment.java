@@ -79,9 +79,17 @@ public final class ProfileFragment extends Fragment {
         skillsRecyclerView = (RecyclerView) view.findViewById(R.id.profile_skills_recyclerView);
         skillsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        nameTextView.setText(profile.getName());
-        progressTextView.setText(Double.toString(profile.getProgress()));
+        nameTextView.setText(generateNameText(profile.getName()));
+        progressTextView.setText(generateProgressText(profile.getProgress()));
 
         skillsRecyclerView.setAdapter(new SkillRecyclerViewAdapter(profile.getSkills()));
+    }
+
+    private String generateNameText(String name) {
+        return "Name: " + name;
+    }
+
+    private String generateProgressText(double progress) {
+        return "Progress: " + Double.toString(progress);
     }
 }
