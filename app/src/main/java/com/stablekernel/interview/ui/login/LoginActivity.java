@@ -110,28 +110,9 @@ public final class LoginActivity extends AppCompatActivity {
                                  Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
 
                                  if (response.code() == 200) {
-                                     String bearerToken = response.body().getBearerToken();
-                                     interviewWebService.profile(bearerToken).enqueue(new Callback<Profile>() {
-                                         @Override
-                                         public void onResponse(Call<Profile> call, Response<Profile> response) {
-                                             String name = response.body().getName();
-                                             double progress = response.body().getProgress();
-                                             List<String> skills = response.body().getSkills();
-                                             Profile profile = new Profile(name, progress, skills);
-                                             ProfileActivity.start(LoginActivity.this, profile);
-                                         }
-
-                                         @Override
-                                         public void onFailure(Call<Profile> call, Throwable t) {
-
-                                         }
-                                     });
+                                     makeProfileCall(response);
                                  } else {
-                                     Toast toast = Toast.makeText(LoginActivity.this,
-                                             R.string.invalid_credentials_toast,
-                                             Toast.LENGTH_LONG);
-                                     toast.setGravity(Gravity.CENTER, 0, 200);
-                                     toast.show();
+                                     invalidCredentialsToast();
                                  }
                              }
 
@@ -147,5 +128,31 @@ public final class LoginActivity extends AppCompatActivity {
         return username.matches("[\\S]+") && password.matches("[\\S]+");
     }
 
+    private void makeProfileCall(Response<TokenResponse> response) {
+        String bearerToken = response.body().getBearerToken();
+        interviewWebService.profile(bearerToken).enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                String name = response.body().getName();
+                double progress = response.body().getProgress();
+                List<String> skills = response.body().getSkills();
+                Profile profile = new Profile(name, progress, skills);
+                ProfileActivity.start(LoginActivity.this, profile);
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void invalidCredentialsToast() {
+        Toast toast = Toast.makeText(LoginActivity.this,
+                R.string.invalid_credentials_toast,
+                Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 200);
+        toast.show();
+    }
 }
 
