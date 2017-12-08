@@ -1,6 +1,6 @@
 # android-interview
 
-### Resources used:
+## Resources Used
 
 * Big Nerd Ranch Android Programming Guide, 3rd Edition
     * Referenced Geoquiz and CriminalIntent projects previously written with this guide
@@ -18,3 +18,9 @@
         * [Handling bundles in activities and fragments](http://blog.petrnohejl.cz/handling-bundles-in-activities-and-fragments)
     * "set actionbar title"
         * [stackoverflow - setting action bar title and subtitle](https://stackoverflow.com/questions/14297178/setting-action-bar-title-and-subtitle)
+        
+        
+## Future Improvements
+
+* Save username on destroy when the save username checkbox is checked
+* Save checkbox state of skills in profile fragment view
