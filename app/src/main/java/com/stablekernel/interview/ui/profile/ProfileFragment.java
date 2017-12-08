@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.stablekernel.interview.R;
 import com.stablekernel.interview.api.model.Profile;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /*
     After you have shown ProfileFragment, your app will crash.  Need to accomplish a few tasks here.
     - The instructions may or may not be complete and exact.
@@ -39,9 +42,9 @@ public final class ProfileFragment extends Fragment {
 
     public static final String ARGUMENT_PROFILE = "com.stablekernel.interview.ARGUMENT_PROFILE";
 
-    private TextView nameTextView;
-    private TextView progressTextView;
-    private RecyclerView skillsRecyclerView;
+    @BindView(R.id.profile_name_textView) TextView nameTextView;
+    @BindView(R.id.profile_progress_textView) TextView progressTextView;
+    @BindView(R.id.profile_skills_recyclerView) RecyclerView skillsRecyclerView;
 
     public static ProfileFragment newInstance(Profile profile) {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -58,6 +61,7 @@ public final class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        ButterKnife.bind(this, v);
         return v;
     }
 
@@ -74,14 +78,10 @@ public final class ProfileFragment extends Fragment {
             profile = arguments.getParcelable(ARGUMENT_PROFILE);
         }
 
-        nameTextView = (TextView) view.findViewById(R.id.profile_name_textView);
-        progressTextView = (TextView) view.findViewById(R.id.profile_progress_textView);
-        skillsRecyclerView = (RecyclerView) view.findViewById(R.id.profile_skills_recyclerView);
-        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         nameTextView.setText(generateNameText(profile.getName()));
         progressTextView.setText(generateProgressText(profile.getProgress()));
 
+        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         skillsRecyclerView.setAdapter(new SkillRecyclerViewAdapter(profile.getSkills()));
     }
 

@@ -20,6 +20,8 @@ import com.stablekernel.interview.ui.profile.ProfileActivity;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,24 +72,21 @@ public final class LoginActivity extends AppCompatActivity {
 
     private InterviewWebService interviewWebService;
 
-    private EditText mUsernameEditText;
-    private EditText mPasswordEditText;
-    private Button mLoginButton;
+    @BindView(R.id.username_field) EditText mUsernameEditText;
+    @BindView(R.id.password_field) EditText mPasswordEditText;
+    @BindView(R.id.login_button) Button mLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         ActionBar ab = getSupportActionBar();
         ab.setTitle(R.string.actionbar_login);
 
         interviewWebService = ((InterviewApplication) getApplication()).getInterviewWebService();
 
-        mUsernameEditText = (EditText) findViewById(R.id.username_field);
-        mPasswordEditText = (EditText) findViewById(R.id.password_field);
-
-        mLoginButton = (Button) findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
