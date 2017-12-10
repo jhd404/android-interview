@@ -64,9 +64,4 @@ public class ProfileService extends Service {
                 );
     }
 
-    public interface LoginCallback {
-        void onSuccess(boolean credentialsAreValid);
-        void onError(Throwable throwable);
-    }
-
 }

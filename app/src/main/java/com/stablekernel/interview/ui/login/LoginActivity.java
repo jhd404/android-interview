@@ -15,22 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.stablekernel.interview.service.LoginCallback;
 import com.stablekernel.interview.service.ProfileService;
 import com.stablekernel.interview.R;
-import com.stablekernel.interview.api.InterviewWebService;
 import com.stablekernel.interview.api.model.LoginCredentials;
-import com.stablekernel.interview.api.model.Profile;
-import com.stablekernel.interview.api.model.TokenResponse;
-import com.stablekernel.interview.InterviewApplication;
 import com.stablekernel.interview.ui.profile.ProfileActivity;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /*
     Use the following instructions to complete the implementation of LoginActivity.
@@ -73,17 +65,14 @@ import retrofit2.Response;
  */
 
 public final class LoginActivity extends AppCompatActivity {
-
-    ProfileService profileService;
-    boolean mBound = false;
-
     public static final String TAG = LoginActivity.class.getSimpleName();
-
-    private InterviewWebService interviewWebService;
 
     @BindView(R.id.username_field) EditText mUsernameEditText;
     @BindView(R.id.password_field) EditText mPasswordEditText;
     @BindView(R.id.login_button) Button mLoginButton;
+
+    ProfileService profileService;
+    boolean mBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +82,6 @@ public final class LoginActivity extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setTitle(R.string.actionbar_login);
-
-        interviewWebService = ((InterviewApplication) getApplication()).getInterviewWebService();
 
         mLoginButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -118,6 +105,30 @@ public final class LoginActivity extends AppCompatActivity {
         mBound = false;
     }
 
+    private void onLogin(String username, String password) {
+        Log.d(TAG, "onLogin() called with username = [" + username + "], password = [" + password + "]");
+
+        if (!isInputValid(username, password)) {
+            Log.d(TAG, "Invalid input");
+            return;
+        }
+
+        LoginCredentials loginCredentials = new LoginCredentials(username, password);
+        profileService.login(loginCredentials, mLoginCallback);
+    }
+
+    boolean isInputValid(String username, String password) {
+        return username.matches("[\\S]+") && password.matches("[\\S]+");
+    }
+
+    private void invalidCredentialsToast() {
+        Toast toast = Toast.makeText(LoginActivity.this,
+                R.string.invalid_credentials_toast,
+                Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 200);
+        toast.show();
+    }
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -132,63 +143,23 @@ public final class LoginActivity extends AppCompatActivity {
         }
     };
 
-    private void onLogin(String username, String password) {
-        Log.d(TAG, "onLogin() called with username = [" + username + "], password = [" + password + "]");
-
-        if (!isInputValid(username, password)) {
-            Log.d(TAG, "Invalid input");
-            return;
+    private LoginCallback mLoginCallback = new LoginCallback() {
+        @Override
+        public void onSuccess(boolean credentialsAreValid) {
+            if (credentialsAreValid) {
+                Log.d(TAG, "VALID CREDS!");
+                // Start Profile Activity
+                ProfileActivity.start(LoginActivity.this);
+            } else {
+                invalidCredentialsToast();
+            }
         }
 
-        LoginCredentials loginCredentials = new LoginCredentials(username, password);
+        @Override
+        public void onError(Throwable throwable) {
 
-        profileService.login(loginCredentials, new ProfileService.LoginCallback() {
-            @Override
-            public void onSuccess(boolean credentialsAreValid) {
-                if (credentialsAreValid) {
-                    Log.d(TAG, "VALID CREDS!");
-                } else {
-                    Log.d(TAG, "nope.");
-                }
-            }
+        }
+    };
 
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-        });
-
-    }
-
-    boolean isInputValid(String username, String password) {
-        return username.matches("[\\S]+") && password.matches("[\\S]+");
-    }
-
-    private void makeProfileCall(Response<TokenResponse> response) {
-        String bearerToken = response.body().getBearerToken();
-        interviewWebService.profile(bearerToken).enqueue(new Callback<Profile>() {
-            @Override
-            public void onResponse(Call<Profile> call, Response<Profile> response) {
-                String name = response.body().getName();
-                double progress = response.body().getProgress();
-                List<String> skills = response.body().getSkills();
-                Profile profile = new Profile(name, progress, skills);
-                ProfileActivity.start(LoginActivity.this, profile);
-            }
-
-            @Override
-            public void onFailure(Call<Profile> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void invalidCredentialsToast() {
-        Toast toast = Toast.makeText(LoginActivity.this,
-                R.string.invalid_credentials_toast,
-                Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER, 0, 200);
-        toast.show();
-    }
 }
 

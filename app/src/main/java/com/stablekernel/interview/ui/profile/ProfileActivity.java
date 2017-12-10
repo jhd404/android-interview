@@ -33,11 +33,16 @@ public final class ProfileActivity extends AppCompatActivity {
 
     private static final String EXTRA_PROFILE = "com.stablekernel.interview.EXTRA_PROFILE";
 
-    public static void start(Context context, Profile profile) {
+    public static void start(Context context) {
         Intent profileIntent = new Intent(context, ProfileActivity.class);
-        profileIntent.putExtra(EXTRA_PROFILE, profile);
         context.startActivity(profileIntent);
     }
+
+//    public static void start(Context context, Profile profile) {
+//        Intent profileIntent = new Intent(context, ProfileActivity.class);
+//        profileIntent.putExtra(EXTRA_PROFILE, profile);
+//        context.startActivity(profileIntent);
+//    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,18 +52,18 @@ public final class ProfileActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setTitle(R.string.actionbar_profile);
 
-        Profile profile = getIntent().getParcelableExtra(EXTRA_PROFILE);
+//        Profile profile = getIntent().getParcelableExtra(EXTRA_PROFILE);
 
-        Log.d(TAG, "ProfileActivity onCreate() called with profile for [" + profile.getName() + "]");
+//        Log.d(TAG, "ProfileActivity onCreate() called with profile for [" + profile.getName() + "]");
 
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (fragment == null) {
-            fragment = ProfileFragment.newInstance(profile);
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
+//        FragmentManager fm = getSupportFragmentManager();
+//        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+//
+//        if (fragment == null) {
+//            fragment = ProfileFragment.newInstance(profile);
+//            fm.beginTransaction()
+//                    .add(R.id.fragment_container, fragment)
+//                    .commit();
+//        }
     }
 }
