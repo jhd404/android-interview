@@ -4,6 +4,10 @@
 
 * Big Nerd Ranch Android Programming Guide, 3rd Edition
     * Referenced Geoquiz and CriminalIntent projects previously written with this guide
+* Android Developer Documentation
+    * [Services](https://developer.android.com/guide/components/services.html)
+    * [Bound Services](https://developer.android.com/guide/components/bound-services.html)
+* [ButterKnife Documentation](http://jakewharton.github.io/butterknife/)
 * Google search
     * "android password field"
         * [Mkyong.com](https://www.mkyong.com/android/android-password-field-example/)
@@ -18,6 +22,9 @@
         * [Handling bundles in activities and fragments](http://blog.petrnohejl.cz/handling-bundles-in-activities-and-fragments)
     * "set actionbar title"
         * [stackoverflow - setting action bar title and subtitle](https://stackoverflow.com/questions/14297178/setting-action-bar-title-and-subtitle)
+    * "return value from retrofit onresponse"
+        * [stackoverflow - How can I return value from onResponse of Retrofit v2](https://stackoverflow.com/questions/44872115/how-can-i-return-value-from-onresponse-of-retrofit-v2)
+        * [stackoverflow - How can I return data in method from Retrofit onResponse?](https://stackoverflow.com/questions/42636247/how-can-i-return-data-in-method-from-retrofit-onresponse)
         
         
 ## Future Improvements

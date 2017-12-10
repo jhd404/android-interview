@@ -1,6 +1,11 @@
 package com.stablekernel.interview.ui.login;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.stablekernel.interview.service.ProfileService;
 import com.stablekernel.interview.R;
 import com.stablekernel.interview.api.InterviewWebService;
 import com.stablekernel.interview.api.model.LoginCredentials;
@@ -68,6 +74,9 @@ import retrofit2.Response;
 
 public final class LoginActivity extends AppCompatActivity {
 
+    ProfileService profileService;
+    boolean mBound = false;
+
     public static final String TAG = LoginActivity.class.getSimpleName();
 
     private InterviewWebService interviewWebService;
@@ -95,6 +104,34 @@ public final class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, ProfileService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(mConnection);
+        mBound = false;
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ProfileService.ProfileBinder binder = (ProfileService.ProfileBinder) service;
+            profileService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
+
     private void onLogin(String username, String password) {
         Log.d(TAG, "onLogin() called with username = [" + username + "], password = [" + password + "]");
 
@@ -105,26 +142,22 @@ public final class LoginActivity extends AppCompatActivity {
 
         LoginCredentials loginCredentials = new LoginCredentials(username, password);
 
-        interviewWebService.login(loginCredentials)
-                .enqueue(new Callback<TokenResponse>() {
-                             @Override
-                             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+        profileService.login(loginCredentials, new ProfileService.LoginCallback() {
+            @Override
+            public void onSuccess(boolean credentialsAreValid) {
+                if (credentialsAreValid) {
+                    Log.d(TAG, "VALID CREDS!");
+                } else {
+                    Log.d(TAG, "nope.");
+                }
+            }
 
-                                 Log.d(TAG, "onResponse() called with: call = [" + call + "], response = [" + response + "]");
+            @Override
+            public void onError(Throwable throwable) {
 
-                                 if (response.code() == 200) {
-                                     makeProfileCall(response);
-                                 } else {
-                                     invalidCredentialsToast();
-                                 }
-                             }
+            }
+        });
 
-                             @Override
-                             public void onFailure(Call<TokenResponse> call, Throwable t) {
-                                 Log.d(TAG, "onFailure() called with: call = [" + call + "], t = [" + t + "]");
-                             }
-                         }
-                );
     }
 
     boolean isInputValid(String username, String password) {
