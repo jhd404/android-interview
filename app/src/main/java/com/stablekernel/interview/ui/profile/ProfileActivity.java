@@ -1,8 +1,11 @@
 package com.stablekernel.interview.ui.profile;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +15,8 @@ import android.util.Log;
 
 import com.stablekernel.interview.R;
 import com.stablekernel.interview.api.model.Profile;
+import com.stablekernel.interview.service.ProfileCallback;
+import com.stablekernel.interview.service.ProfileService;
 
 /*
     After you've finished implementing LoginActivity, you have some tasks here.
@@ -28,21 +33,17 @@ import com.stablekernel.interview.api.model.Profile;
  */
 
 public final class ProfileActivity extends AppCompatActivity {
-
     public static final String TAG = ProfileActivity.class.getSimpleName();
 
     private static final String EXTRA_PROFILE = "com.stablekernel.interview.EXTRA_PROFILE";
+
+    ProfileService profileService;
+    boolean mBound = false;
 
     public static void start(Context context) {
         Intent profileIntent = new Intent(context, ProfileActivity.class);
         context.startActivity(profileIntent);
     }
-
-//    public static void start(Context context, Profile profile) {
-//        Intent profileIntent = new Intent(context, ProfileActivity.class);
-//        profileIntent.putExtra(EXTRA_PROFILE, profile);
-//        context.startActivity(profileIntent);
-//    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,19 +52,46 @@ public final class ProfileActivity extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setTitle(R.string.actionbar_profile);
-
-//        Profile profile = getIntent().getParcelableExtra(EXTRA_PROFILE);
-
-//        Log.d(TAG, "ProfileActivity onCreate() called with profile for [" + profile.getName() + "]");
-
-//        FragmentManager fm = getSupportFragmentManager();
-//        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-//
-//        if (fragment == null) {
-//            fragment = ProfileFragment.newInstance(profile);
-//            fm.beginTransaction()
-//                    .add(R.id.fragment_container, fragment)
-//                    .commit();
-//        }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, ProfileService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(mConnection);
+        mBound = false;
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ProfileService.ProfileBinder binder = (ProfileService.ProfileBinder) service;
+            profileService = binder.getService();
+            mBound = true;
+            FragmentManager fm = getSupportFragmentManager();
+            Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+
+            if (fragment == null) {
+                fragment = ProfileFragment.newInstance();
+                fm.beginTransaction()
+                        .add(R.id.fragment_container, fragment)
+                        .commit();
+            }
+            Log.d(TAG, "Bound to service");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
+
+
+
 }

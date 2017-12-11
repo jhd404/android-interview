@@ -3,6 +3,7 @@ package com.stablekernel.interview.ui.profile;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.stablekernel.interview.R;
 import com.stablekernel.interview.api.model.Profile;
+import com.stablekernel.interview.service.ProfileCallback;
+import com.stablekernel.interview.service.ProfileService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,16 +49,11 @@ public final class ProfileFragment extends Fragment {
     @BindView(R.id.profile_progress_textView) TextView progressTextView;
     @BindView(R.id.profile_skills_recyclerView) RecyclerView skillsRecyclerView;
 
-    public static ProfileFragment newInstance(Profile profile) {
-        ProfileFragment profileFragment = new ProfileFragment();
+    Profile mProfile;
 
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(ARGUMENT_PROFILE, profile);
-        profileFragment.setArguments(arguments);
-
-        return profileFragment;
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
     }
-
 
     @Nullable
     @Override
@@ -70,20 +68,9 @@ public final class ProfileFragment extends Fragment {
         Log.d(TAG, "onViewCreated() called with: view = [" + view + "], savedInstanceState = [" + savedInstanceState + "]");
         super.onViewCreated(view, savedInstanceState);
 
-        Profile profile = null;
-
-        Bundle arguments = getArguments();
-
-        if (arguments != null) {
-            profile = arguments.getParcelable(ARGUMENT_PROFILE);
-        }
-
-        nameTextView.setText(generateNameText(profile.getName()));
-        progressTextView.setText(generateProgressText(profile.getProgress()));
-
-        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        skillsRecyclerView.setAdapter(new SkillRecyclerViewAdapter(profile.getSkills()));
+        getUserProfile();
     }
+
 
     private String generateNameText(String name) {
         return "Name: " + name;
@@ -92,4 +79,30 @@ public final class ProfileFragment extends Fragment {
     private String generateProgressText(double progress) {
         return "Progress: " + Double.toString(progress);
     }
+
+    private void getUserProfile() {
+        ((ProfileActivity) getActivity()).profileService.getProfile(mProfileCallback);
+    }
+
+    private ProfileCallback mProfileCallback = new ProfileCallback() {
+        @Override
+        public void onSuccess(Profile profile) {
+            mProfile = profile;
+            setProfileViewValues();
+        }
+
+        @Override
+        public void onError(Throwable throwable) {
+
+        }
+    };
+
+    private void setProfileViewValues() {
+        nameTextView.setText(generateNameText(mProfile.getName()));
+        progressTextView.setText(generateProgressText(mProfile.getProgress()));
+
+        skillsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        skillsRecyclerView.setAdapter(new SkillRecyclerViewAdapter(mProfile.getSkills()));
+    }
+
 }
