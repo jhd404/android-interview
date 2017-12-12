@@ -71,9 +71,9 @@ public final class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        Log.d(TAG, "onResume");
-        super.onResume();
+    public void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
         getUserProfile();
     }
     
