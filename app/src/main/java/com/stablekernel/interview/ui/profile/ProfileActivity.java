@@ -48,6 +48,7 @@ public final class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_profile);
 
         ActionBar ab = getSupportActionBar();
@@ -57,6 +58,7 @@ public final class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart");
         Intent intent = new Intent(this, ProfileService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -64,6 +66,7 @@ public final class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        Log.d(TAG, "onStop");
         unbindService(mConnection);
         mBound = false;
     }
@@ -71,9 +74,11 @@ public final class ProfileActivity extends AppCompatActivity {
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected");
             ProfileService.ProfileBinder binder = (ProfileService.ProfileBinder) service;
             profileService = binder.getService();
             mBound = true;
+
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
